@@ -1,0 +1,180 @@
+ All Materials
+  /* Container styling */
+  
+  .pdf-container {
+    height: 100vh;
+    background-color: #f9fafb;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pdf-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+    height: 50px;
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 1000;
+    border-radius: 15px;
+  }
+
+  .pdf-header > button{
+    width: 110px;
+    margin-top: 0;
+    box-shadow: none;
+  }
+  
+  .pdf-container h2 {
+    text-align: center;
+    color: #1f2937;
+    font-size: 1.8rem;
+  }
+  
+  /* Grid layout for cards */
+  
+  .pdf-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+    margin: 20px 0;
+    justify-items: center;
+    overflow-y: auto;
+    max-height: calc(100vh - 150px); /* Adjust height to allow scrolling */
+  }
+  
+  /* Individual PDF card styling */
+  .pdf-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 1px 14px 16px 8px rgba(0, 0, 0, 0.08);
+    padding: 20px 15px;
+    margin: 10px 0;
+    text-align: center;
+    width: 100%;
+    max-width: 250px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .pdf-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+  }
+  
+  /* Thumbnail styling */
+  .pdf-thumbnail {
+    width: 80px;
+    height: 100px;
+    object-fit: contain;
+    margin-bottom: 15px;
+    border-radius: 6px;
+  }
+  
+  /* Title text */
+  .pdf-title, .pdf-subject {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 6px;
+  }
+  
+  /* Subject text */
+  /* .pdf-subject {
+    font-size: 0.95rem;
+    color: #6b7280;
+    font-style: italic;
+  } */
+  
+  /* Message for no results or loading */
+  .pdf-grid p {
+    grid-column: 1 / -1;
+    font-size: 1rem;
+    color: #9ca3af;
+    font-style: italic;
+  }
+
+  .pdf-grid img{
+    width: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .view-button{
+    background-color: #2563EB;
+    color: #fff;
+    padding: 10px 10px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  .view-button:hover{
+    background-color: #0a3ecd;
+  }
+  
+
+  .pdf-footer {
+    height: 50px;
+    position: fixed;
+    margin-bottom: 35px;
+    bottom: 0;
+    background-color: transparent;
+    z-index: 1000;
+    border-radius: 15px;
+    width: 100px;
+  }
+
+  .edit-delete-btn{
+    display: flex;
+    gap: 20px;
+  }
+
+  .edit-delete-btn > .edit{
+    background-color: #565d56;
+    color: #fff;
+    padding: 5px;
+  }
+  .edit-delete-btn > .edit:hover{
+    background-color: #3b4440;
+  }
+  .edit-delete-btn > .delete{
+    background-color: #F44336;
+    padding: 5px;
+  }
+  .edit-delete-btn > .delete:hover{
+    background-color: #D32F2F;
+  }
+
+  @media (max-width: 768px) {
+    .hero-section {
+      margin: 80px 0;
+    }
+  }
+
+
+ 
+  
+
+  @media (max-width: 480px) {
+    .pdf-container h2 {
+      font-size: 1.2rem;
+    }
+  }
+
+
+  @media (max-width: 768px) {
+    .pdf-header > button {
+      width: 90px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .pdf-header > button {
+      width: 70px;
+    }
+  }
+   

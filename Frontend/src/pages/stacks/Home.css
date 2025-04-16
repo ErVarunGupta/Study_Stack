@@ -1,0 +1,79 @@
+.home-container h1{
+   color: #212529;;
+   font-weight: 700;
+}
+
+.home{
+    background-color: #fff;
+  padding: 32px 48px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 8px 8px 24px 0px rgba(66, 68, 90, 1);
+  margin-top: 20px;
+}
+
+
+.container h2{
+    font-size: 22px;
+    opacity: 0.7;
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+
+  
+  .home > .read-btn{
+    background-color: #2563EB;
+    color: #fff;
+    margin-top: 30px;
+  }
+
+  .navigation-buttons{
+    display: flex;
+    gap: 40px;
+  }
+
+  .back-button, .home-button {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+    background-color: #e0e0e0; /* light gray */
+    color: #333;
+    padding: 10px 10px;
+    width: 50%;
+    height: 50px;
+    border-radius: 15px;
+    transition: color 0.3s ease;
+  }
+
+  .back-button:hover {
+    color: #2563EB; /* blue */
+  }
+
+  .home-button:hover {
+    color: #059669; /* green */
+  }
+
+  
+
+  .home > .write-btn{
+    background-color: #10B981;
+    color: #fff;
+    margin-top: 30px;
+  }
+
+  .write-container h1{
+    color: #212529;
+    font-weight: 700;
+  }
+
+
+  @media (max-width: 600px) {
+    .container > form > div {
+        flex-direction: column;
+    }
+}
+ 

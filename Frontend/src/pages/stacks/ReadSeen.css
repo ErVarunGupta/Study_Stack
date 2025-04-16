@@ -1,0 +1,16 @@
+.write-container>.book-btn{
+    background: "#1D4ED8";
+     color: "#fff"
+}
+
+.write-container>.book-btn:hover{
+    background: "#1E40AF";
+}
+
+.write-container>.notebook-btn{
+    background: "#10B981";
+     color: "#fff"
+}
+.write-container>.notebook-btn:hover{
+    background: "#059669";
+}
