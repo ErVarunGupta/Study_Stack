@@ -1,6 +1,4 @@
-import './Home.css';
-import './Read.css';
-import React,{useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HandleLogout from '../HandleLogout.jsx';
 import { ToastContainer } from 'react-toastify';
@@ -8,99 +6,93 @@ import { IoArrowBackOutline } from "react-icons/io5";
 import { FaBackward } from "react-icons/fa";
 
 function Read() {
-    const [department, setDepartment] = useState('');
-    const [semester, setSemester] = useState('');
-    const navigate = useNavigate();
+  const [department, setDepartment] = useState('');
+  const [semester, setSemester] = useState('');
+  const [loggedInUser, setLoggedInUser] = useState('');
+  const navigate = useNavigate();
 
-    const [loggedInUser, setLoggedInUser] = React.useState('');
-    useEffect(() =>{
-        setLoggedInUser(localStorage.getItem('loggedInUser'));
-    },[loggedInUser]);
+  useEffect(() => {
+    setLoggedInUser(localStorage.getItem('loggedInUser') || '');
+  }, []);
 
-    const handleSearch = () => {
-        if (department && semester) {
-            navigate(`/read/seen?department=${department}&semester=${semester}`);
-        } else {
-            alert('Please select both department and semester.');
-        }
-    };
+  const handleSearch = () => {
+    if (department && semester) {
+      navigate(`/read/seen?department=${department}&semester=${semester}`);
+    } else {
+      alert('Please select both department and semester.');
+    }
+  };
 
-    return (
-        <div>
-        <div className="container">
-            <h1>Select Department and Semester</h1>
+  return (
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-6">
+      <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-lg flex flex-col gap-6 items-center">
+        <h1 className="text-2xl font-bold text-gray-800">Select Department and Semester</h1>
 
-            <div className="dropdown">
-                <select
-                    id="departmentSelect"
-                    value={department}
-                    onChange={(e) => setDepartment(e.target.value)}
-                >
-                    <option value="" disabled>
-                        Choose Department
-                    </option>
-                    <option value="CSE">CSE</option>
-                    <option value="Civil">Civil</option>
-                    <option value="EEE">EEE</option>
-                    <option value="Mechanical">Mechanical</option>
-                    <option value="Electrical">Electrical</option>
-                    <option value="CSE_IOT">CSE (IoT)</option>
-                    <option value="Electronics">Electronics</option>
-                    <option value="IT">IT</option>
-                    <option value="FireTech">Fire Technology</option>
-                </select>
-            </div>
+        <select
+          id="departmentSelect"
+          value={department}
+          onChange={(e) => setDepartment(e.target.value)}
+          className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+        >
+          <option value="" disabled>Choose Department</option>
+          <option value="CSE">CSE</option>
+          <option value="Civil">Civil</option>
+          <option value="EEE">EEE</option>
+          <option value="Mechanical">Mechanical</option>
+          <option value="Electrical">Electrical</option>
+          <option value="CSE_IOT">CSE (IoT)</option>
+          <option value="Electronics">Electronics</option>
+          <option value="IT">IT</option>
+          <option value="FireTech">Fire Technology</option>
+        </select>
 
-            <div id="semesterSection" className="semester-section">
-                <select
-                    id="semesterSelect"
-                    value={semester}
-                    onChange={(e) => setSemester(e.target.value)}
-                >
-                    <option value="" disabled>
-                        Choose Semester
-                    </option>
-                    <option value="1">1 Semester</option>
-                    <option value="2">2 Semester</option>
-                    <option value="3">3 Semester</option>
-                    <option value="4">4 Semester</option>
-                    <option value="5">5 Semester</option>
-                    <option value="6">6 Semester</option>
-                    <option value="7">7 Semester</option>
-                    <option value="8">8 Semester</option>
-                </select>
-            </div>
+        <select
+          id="semesterSelect"
+          value={semester}
+          onChange={(e) => setSemester(e.target.value)}
+          className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+        >
+          <option value="" disabled>Choose Semester</option>
+          <option value="1">1 Semester</option>
+          <option value="2">2 Semester</option>
+          <option value="3">3 Semester</option>
+          <option value="4">4 Semester</option>
+          <option value="5">5 Semester</option>
+          <option value="6">6 Semester</option>
+          <option value="7">7 Semester</option>
+          <option value="8">8 Semester</option>
+        </select>
 
-            <button className="seen-btn" onClick={handleSearch}>
-                Seen
-            </button>
+        <button
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition cursor-pointer"
+          onClick={handleSearch}
+        >
+          Seen
+        </button>
+      </div>
+
+      <div className="flex gap-4 mt-8">
+        <div
+          className="flex items-center gap-2 cursor-pointer bg-gray-200 text-gray-800 hover:text-blue-600 px-4 py-2 rounded-lg transition"
+          onClick={() => window.location.href = '/home'}
+        >
+          <IoArrowBackOutline />
+          <span>Back</span>
         </div>
 
-            <div className="navigation-buttons">
-                <div className="back-button" 
-                        onClick={() => window.location.href = '/home'}
-                        onMouseOver={(e) => e.target.style.color = "#2563EB"}
-                        onMouseOut={(e) => e.target.style.color = "inherit"}>
-                    <IoArrowBackOutline />
-                    <span>
-                        Back
-                    </span>
-                </div>
-                <div className="home-button" 
-                        onClick={() => window.location.href = '/'}
-                        onMouseOver={(e) => e.target.style.color = "#059669"}
-                        onMouseOut={(e) => e.target.style.color = "inherit"}>
-                    <FaBackward />
-                    <span>
-                        Home
-                    </span>
-                </div>
-            </div>
-            <HandleLogout loggedInUser={loggedInUser}/>
-            <ToastContainer />
-        
+        <div
+          className="flex items-center gap-2 cursor-pointer bg-gray-200 text-gray-800 hover:text-green-600 px-4 py-2 rounded-lg transition"
+          onClick={() => window.location.href = '/home'}
+        >
+          <FaBackward />
+          <span>Home</span>
         </div>
-    );
+      </div>
+
+      <HandleLogout loggedInUser={loggedInUser} />
+      <ToastContainer />
+    </div>
+  );
 }
 
 export default Read;

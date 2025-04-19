@@ -1,40 +1,35 @@
 import React, { useState } from "react";
-import {ToastContainer} from 'react-toastify';
-import { useNavigate, Link } from "react-router-dom";
-import {handleError, handleSuccess} from '../utils';
+import { ToastContainer } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
+import { handleError, handleSuccess } from '../utils';
 import { IoArrowBackOutline } from "react-icons/io5";
 import { FaBackward } from "react-icons/fa";
-import './Home.css';
 
-function Write_Notebook (){
-    const[notebookInfo, setNotebookInfo] = useState({
+function Write_Notebook() {
+    const [notebookInfo, setNotebookInfo] = useState({
         department: '',
-        semester: '', 
+        semester: '',
         subject: '',
         pdfUrl: '',
         uploadedBy: '',
         uploadDate: Date.now()
-    })
+    });
 
     const navigate = useNavigate();
 
-    const handleChange = (e)=>{
-        const {name, value} = e.target;
-        const copyNotebookInfo = {...notebookInfo};
-        copyNotebookInfo[name] = value;
-        setNotebookInfo(copyNotebookInfo);
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setNotebookInfo(prev => ({ ...prev, [name]: value }));
     }
 
-    console.log(notebookInfo);
-    
-    const handleNotebook = async(e)=>{
+    const handleNotebook = async (e) => {
         e.preventDefault();
-        const {department, semester, subject, pdfUrl} = notebookInfo;
-        if(!department || !semester || !subject || !pdfUrl ){
-            return handleError("department, semester, subject and pdfUrl are required")
+        const { department, semester, subject, pdfUrl } = notebookInfo;
+        if (!department || !semester || !subject || !pdfUrl) {
+            return handleError("Department, semester, subject, and PDF URL are required");
         }
 
-        try{
+        try {
             const token = localStorage.getItem('token');
             const url = "http://localhost:8080/stack/write/notebook";
             const response = await fetch(url, {
@@ -44,113 +39,109 @@ function Write_Notebook (){
                     'Authorization': `${token}`
                 },
                 body: JSON.stringify(notebookInfo)
-            })
+            });
             const result = await response.json();
-            console.log(result);
-            const {success, message, error} = result;
-            if(success){
+            const { success, message, error } = result;
+            if (success) {
                 handleSuccess(message);
-                setTimeout(()=>{
-                    navigate('/home')
-                },1000);
-            }else if(error){
-                const details = error.details[0].message;
+                setTimeout(() => {
+                    navigate('/home');
+                }, 1000);
+            } else if (error) {
+                const details = error.details?.[0]?.message || message;
                 handleError(details);
-            }else if(!success){
+            } else {
                 handleError(message);
             }
-
-            console.log(result);
-
-        }catch(err){
-            handleError(err);
+        } catch (err) {
+            handleError(err.message || "Something went wrong");
         }
     }
 
-
     return (
-        <div className="container">
-             <h1>Notebook Info</h1>
-            <form onSubmit={handleNotebook}>
-                <div className="notebook-form">
-                    <div >
-                        <div>
-                            <label htmlFor="department">Department</label>
-                            <input 
-                            onChange={handleChange}
-                            type="text" 
-                            autoFocus
-                            placeholder="Enter the department" 
-                            name="department"
-                            value={notebookInfo.department}
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="semester">Semester</label>
-                            <input 
-                            onChange={handleChange}
-                            type="text" 
-                            autoFocus
-                            placeholder="Enter the semester" 
-                            name="semester"
-                            value={notebookInfo.semester}
-                            />
-                        </div>
-                    </div>
-                    <div>
-                        <div>
-                            <label htmlFor="subject">Subject</label>
-                            <input 
-                            onChange={handleChange}
-                            type="text" 
-                            autoFocus
-                            placeholder="Enter the subject" 
-                            name="subject"
-                            value={notebookInfo.subject}
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="pdfUrl">PDF URL</label>
-                            <input 
-                            onChange={handleChange}
-                            type="text" 
-                            autoFocus
-                            placeholder="Enter the pdfUrl" 
-                            name="pdfUrl"
-                            value={notebookInfo.pdfUrl}
-                            />
-                        </div>
-                    
-                    </div>
-                </div>
-                <button type="submit">Submit</button>
-                
-            </form>
+        <div className="min-h-screen bg-gray-100 flex flex-col items-center p-6">
+            <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-2xl">
 
-             <div className="navigation-buttons">
-                <div className="back-button" 
-                        onClick={() => window.location.href = '/write'}
-                        onMouseOver={(e) => e.target.style.color = "#2563EB"}
-                        onMouseOut={(e) => e.target.style.color = "inherit"}>
-                    <IoArrowBackOutline />
-                    <span>
-                        Back
-                    </span>
+                {/* Header with Back, Title, Home */}
+                <div className="flex items-center justify-between mb-6">
+                    <button
+                        onClick={() => navigate('/write')}
+                        className="flex items-center gap-2 bg-gray-200 text-gray-800 hover:text-blue-600 px-4 py-2 rounded-lg transition cursor-pointer"
+                    >
+                        <IoArrowBackOutline />
+                        <span>Back</span>
+                    </button>
+
+                    <h1 className="text-xl md:text-2xl font-bold text-gray-800 text-center">Notebook Info</h1>
+
+                    <button
+                        onClick={() => navigate('/home')}
+                        className="flex items-center gap-2 bg-gray-200 text-gray-800 hover:text-green-600 px-4 py-2 rounded-lg transition cursor-pointer"
+                    >
+                        <FaBackward />
+                        <span>Home</span>
+                    </button>
                 </div>
-                <div className="home-button" 
-                        onClick={() => window.location.href = '/'}
-                        onMouseOver={(e) => e.target.style.color = "#059669"}
-                        onMouseOut={(e) => e.target.style.color = "inherit"}>
-                    <FaBackward />
-                    <span>
-                        Home
-                    </span>
-                </div>
+
+                <form onSubmit={handleNotebook}>
+                    <div className="space-y-4">
+                        <div className="flex flex-col space-y-2">
+                            <label htmlFor="department" className="font-medium text-gray-600">Department</label>
+                            <input
+                                onChange={handleChange}
+                                type="text"
+                                placeholder="Enter the department"
+                                name="department"
+                                value={notebookInfo.department}
+                                className="border border-gray-300 rounded-lg p-3"
+                            />
+                        </div>
+                        <div className="flex flex-col space-y-2">
+                            <label htmlFor="semester" className="font-medium text-gray-600">Semester</label>
+                            <input
+                                onChange={handleChange}
+                                type="text"
+                                placeholder="Enter the semester"
+                                name="semester"
+                                value={notebookInfo.semester}
+                                className="border border-gray-300 rounded-lg p-3"
+                            />
+                        </div>
+                        <div className="flex flex-col space-y-2">
+                            <label htmlFor="subject" className="font-medium text-gray-600">Subject</label>
+                            <input
+                                onChange={handleChange}
+                                type="text"
+                                placeholder="Enter the subject"
+                                name="subject"
+                                value={notebookInfo.subject}
+                                className="border border-gray-300 rounded-lg p-3"
+                            />
+                        </div>
+                        <div className="flex flex-col space-y-2">
+                            <label htmlFor="pdfUrl" className="font-medium text-gray-600">PDF URL</label>
+                            <input
+                                onChange={handleChange}
+                                type="text"
+                                placeholder="Enter the PDF URL"
+                                name="pdfUrl"
+                                value={notebookInfo.pdfUrl}
+                                className="border border-gray-300 rounded-lg p-3"
+                            />
+                        </div>
+                        <button
+                            type="submit"
+                            className="w-full py-3 mt-6 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition cursor-pointer"
+                        >
+                            Submit
+                        </button>
+                    </div>
+                </form>
             </div>
-            
-            <ToastContainer/>
+
+            <ToastContainer />
         </div>
-    )
+    );
 }
 
 export default Write_Notebook;

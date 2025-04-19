@@ -1,19 +1,17 @@
-import React,{ use, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './AllMaterials.css'; // reuse the card CSS
 import HandleLogout from '../HandleLogout';
 import { ToastContainer } from 'react-toastify';
 import { IoArrowBackOutline } from "react-icons/io5";
 import { FaBackward } from "react-icons/fa";
-import {handleError, handleSuccess} from '../utils';
-import { useNavigate } from 'react-router-dom';
+import { handleError, handleSuccess } from '../utils';
 
 function SearchResult() {
     const location = useLocation();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-
+    const [uploader, setUploader] = useState({});
     const navigate = useNavigate();
 
     // Extract query params
@@ -25,9 +23,7 @@ function SearchResult() {
     useEffect(() => {
         if (department && semester && type) {
             axios
-                .get(`http://localhost:8080/stack/read/search`, {
-                    params: { department, semester, type },
-                })
+                .get(`http://localhost:8080/stack/read/search`, { params: { department, semester, type } })
                 .then((res) => {
                     setData(res.data);
                     setLoading(false);
@@ -39,20 +35,45 @@ function SearchResult() {
         }
     }, [department, semester, type]);
 
-    //logout
-    const [loggedInUser, setLoggedInUser] = useState('');
-    useEffect(() =>{
-        setLoggedInUser(localStorage.getItem('loggedInUser'));
-    },[loggedInUser]);
-
-
-
-    // edit handle
-    const editHandle = async (id) => {
-        try{
-            const type = query.get('type');
+    // Fetch uploader's name based on user ID
+    const fetchUser = async (userId) => {
+        try {
             const token = localStorage.getItem('token');
+            const url = `http://localhost:8080/root/${userId}`;
+            const response = await fetch(url, {
+                method: "GET",
+                headers: { 'Content-Type': 'application/json', 'Authorization': `${token}` }
+            });
+            const result = await response.json();
+            return result.name;
+        } catch (err) {
+            console.error("Error fetching user:", err);
+            return "Unknown";
+        }
+    }
 
+    useEffect(() => {
+        const loadUsernames = async () => {
+            const uniqueUploaderIds = [...new Set(data.map(item => item.uploadedBy))];
+            const usernameMap = {};
+
+            for (const uploaderId of uniqueUploaderIds) {
+                usernameMap[uploaderId] = await fetchUser(uploaderId);
+            }
+
+            setUploader(usernameMap);
+        };
+
+        if (data.length > 0) {
+            loadUsernames();
+        }
+    }, [data]);
+
+    // Edit and delete handlers
+    const editHandle = async (id) => {
+        const token = localStorage.getItem('token');
+        const type = query.get('type');
+        try {
             const url = `http://localhost:8080/action/edit/${id}`;
             const response = await fetch(url, {
                 method: "GET",
@@ -62,31 +83,26 @@ function SearchResult() {
                 }
             });
             const result = await response.json();
-            // console.log(result);
-            const {success, message, error} = result;
-            if(success){
+            const { success, message, error } = result;
+
+            if (success) {
                 handleSuccess(message);
                 setTimeout(() => {
-                    navigate(`/action/edit/${id}?type=${type}`, { state: result.data }); 
+                    navigate(`/action/edit/${id}?type=${type}`, { state: result.data });
                 }, 1000);
-            }else if(error){
+            } else if (error) {
                 handleError(error.details?.[0]?.message || "An error occurred");
-            }else{
+            } else {
                 handleError(message);
             }
-        }catch(err){
+        } catch (err) {
             handleError(err.message || "An unexpected error occurred");
         }
-        
-    }
+    };
 
-    // delete handle
-    const deleteHandle = async(id) =>{
-        try{
-            
-            const token = localStorage.getItem('token');
-            console.log(token);
-            console.log(id);
+    const deleteHandle = async (id) => {
+        const token = localStorage.getItem('token');
+        try {
             const url = `http://localhost:8080/action/delete/${id}`;
             const response = await fetch(url, {
                 method: "DELETE",
@@ -96,134 +112,75 @@ function SearchResult() {
                 }
             });
             const result = await response.json();
-            console.log(result);
-            const {success, message, error} = result;
-            if(success){
+            const { success, message, error } = result;
+
+            if (success) {
                 handleSuccess(message);
                 setData(data.filter(item => item.id !== id));
                 setTimeout(() => {
-                    window.location.reload(); // 🔄 hard refresh after a short delay
+                    window.location.reload();
                 }, 1000);
-            }else if(error){
+            } else if (error) {
                 handleError(error.details?.[0]?.message || "An error occurred");
-            }else{
+            } else {
                 handleError(message);
             }
-        }catch(err){
+        } catch (err) {
             handleError(err.message || "An unexpected error occurred");
         }
-    }
-
-    //uploader name handle
-    const [uploader, setUploader] = useState({});
-
-    const fetchUser = async (userId) => {
-        const token = localStorage.getItem('token');
-        const url = `http://localhost:8080/root/${userId}`;
-        const response = await fetch(url, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `${token}`
-            }
-        })
-        const result = await response.json();
-        console.log(result);   //debugging
-        return result.name;
-    }
-
-    useEffect(() => {
-        const loadUsernames = async () => {
-            const uniqueUploaderIds = [...new Set(data.map(item => item.uploadedBy))];
-    
-            const usernameMap = {};
-            await Promise.all(
-                uniqueUploaderIds.map(async (uploaderId) => {
-                    const name = await fetchUser(uploaderId);
-                    usernameMap[uploaderId] = name;
-                })
-            );
-            // console.log(usernameMap);
-            setUploader(usernameMap);
-        };
-    
-        if (data.length > 0) {
-            loadUsernames();
-        }
-    }, [data]);
-    
-
+    };
 
     return (
+        <div className="h-screen bg-gray-50 font-sans flex flex-col px-6 py-4">
+            {/* Header */}
+            <div className="flex justify-between items-center h-16 sticky top-0 bg-white z-20 rounded-lg shadow-lg">
+                <button className="flex items-center bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 cursor-pointer" onClick={() => navigate(-1)}>
+                    <IoArrowBackOutline className="mr-2 text-xl" /> Back
+                </button>
+                <h2 className="text-2xl font-semibold text-gray-800 text-center">{type.charAt(0).toUpperCase() + type.slice(1)}s for {department} - Semester {semester}</h2>
+                <button className="flex items-center bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 cursor-pointer" onClick={() => window.location.href = '/home'}>
+                    <FaBackward className="mr-2 text-xl" /> Home
+                </button>
+            </div>
 
-        <div className="pdf-container">
-            <div className='pdf-header' >
-                <button className="back-button" onClick={() => navigate(-1)}>
-                    <IoArrowBackOutline className="icon" /> Back
-                </button>
-                <h2>{type.charAt(0).toUpperCase() + type.slice(1)}s for {department} - Semester {semester}</h2>
-                <button className="home-button" onClick={() => window.location.href = '/'}>
-                    <FaBackward className="icon" /> Home
-                </button>
-            </div>
-            <div className='hero-section'>
-            {loading ? (
-                <p>Loading...</p>
-            ) : (
-                <div className="pdf-grid" >
-                    {data.length > 0 ? (
-                        data.map((item, idx) => (
-                            <div className="pdf-card" key={idx}>
-                                <img
-                                    src={item.imageUrl || 'https://cdn.pixabay.com/photo/2014/09/05/18/32/old-books-436498_1280.jpg'}
-                                    alt="PDF"
-                                    className="pdf-thumbnail"
-                                />
-                                <h3 className="pdf-title">{item.title}</h3>
-                                <h3 className="pdf-subject">{item.subject}</h3>
-                                <p>Uploaded By: {uploader[item.uploadedBy] || "Loading..."}</p>
-                                <button
-                                    className="view-button"
-                                    onClick={() => window.open(item.pdfUrl, '_blank')}
-                                >
-                                    View
-                                </button>
-                                <div className='edit-delete-btn'>
-                                    <button 
-                                        className='edit' 
-                                        onClick={() => editHandle(item._id)}
-                                    >edit</button>
-                                    <button 
-                                        className='delete' 
-                                        onClick={() => deleteHandle(item._id)}
-                                    >delete</button>
+            {/* Content Section */}
+            <div className="flex flex-wrap justify-center gap-8 mt-8 mb-4 overflow-y-auto max-h-[calc(100vh-150px)]">
+                {loading ? (
+                    <p className="text-xl text-gray-500">Loading...</p>
+                ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                        {data.length > 0 ? (
+                            data.map((item, idx) => (
+                                <div className="bg-white p-6 rounded-lg shadow-lg transform transition-all duration-300 hover:translate-y-2 hover:shadow-xl flex flex-col items-center text-center" key={idx}>
+                                    <img
+                                        src={item.imageUrl || 'https://cdn.pixabay.com/photo/2014/09/05/18/32/old-books-436498_1280.jpg'}
+                                        alt="PDF"
+                                        className="w-full h-40 object-cover rounded-lg mb-4"
+                                    />
+                                    <h3 className="text-lg font-semibold text-gray-800 mb-2">{item.title}</h3>
+                                    <h4 className="text-sm text-gray-500 mb-4">{item.subject}</h4>
+                                    <p className="text-sm text-gray-500 mb-4">Uploaded By: {uploader[item.uploadedBy] || "Loading..."}</p>
+                                    <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 mb-4 cursor-pointer" onClick={() => window.open(item.pdfUrl, '_blank')}>
+                                        View
+                                    </button>
+                                    <div className="flex justify-between gap-4">
+                                        <button className="bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-gray-700 cursor-pointer" onClick={() => editHandle(item._id)}>Edit</button>
+                                        <button className="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 cursor-pointer" onClick={() => deleteHandle(item._id)}>Delete</button>
+                                    </div>
                                 </div>
-                            </div>
-                        ))
-                    ) : (
-                        <p>No results found.</p>
-                    )}
-                </div>
-            )}
-            
+                            ))
+                        ) : (
+                            <p className="col-span-full text-center text-gray-400">No results found.</p>
+                        )}
+                    </div>
+                )}
             </div>
-            <div className='pdf-footer'>
-                <HandleLogout loggedInUser={loggedInUser}/>
-                <ToastContainer/>
-            </div>
+
+            {/* Fixed Footer (Logout) */}
+            <HandleLogout loggedInUser={localStorage.getItem('loggedInUser')} />
+            <ToastContainer />
         </div>
     );
 }
 
 export default SearchResult;
-
-
-
-
-
-
-
-
-
-
-

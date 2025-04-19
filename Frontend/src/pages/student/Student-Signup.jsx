@@ -1,174 +1,158 @@
 import React, { useState } from "react";
-import {ToastContainer} from 'react-toastify';
+import { ToastContainer } from "react-toastify";
 import { useNavigate, Link } from "react-router-dom";
-import {handleError, handleSuccess} from '../utils';
-import './Student.css';
+import { handleError, handleSuccess } from "../utils";
+import { IoArrowBackOutline } from "react-icons/io5";
+import "react-toastify/dist/ReactToastify.css";
 
-function Student_Signup (){
-    const[signupInfo, setSignupInfo] = useState({
-        name: '',
-        email: '', 
-        institute: '',
-        department: '',
-        semester: '',
-        registration_no: '',
-        roll_no: '',
-        password: ''
-    })
+function Student_Signup() {
+  const [signupInfo, setSignupInfo] = useState({
+    name: "",
+    email: "",
+    institute: "",
+    department: "",
+    semester: "",
+    registration_no: "",
+    roll_no: "",
+    password: "",
+  });
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const handleChange = (e)=>{
-        const {name, value} = e.target;
-        const copySignupInfo = {...signupInfo};
-        copySignupInfo[name] = value;
-        setSignupInfo(copySignupInfo);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setSignupInfo({ ...signupInfo, [name]: value });
+  };
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    const {
+      name,
+      email,
+      institute,
+      department,
+      semester,
+      registration_no,
+      roll_no,
+      password,
+    } = signupInfo;
+
+    if (
+      !name ||
+      !email ||
+      !password ||
+      !institute ||
+      !department ||
+      !semester ||
+      !registration_no ||
+      !roll_no
+    ) {
+      return handleError(
+        "Name, email, institute, department, semester, registration no., roll no. and password are required"
+      );
     }
 
-    console.log(signupInfo);
-    
-    const handleSignup = async(e)=>{
-        e.preventDefault();
-        const {name, email,institute,department,semester,registration_no,roll_no, password} = signupInfo;
-        if(!name|| !email||!password || !institute|| !department || !semester || !registration_no || !roll_no){
-            return handleError("name, email, institute, department, semester, registration no., roll no. and password are required")
-        }
+    try {
+      const url = "http://localhost:8080/root/student-signup";
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(signupInfo),
+      });
 
-        try{
-            const url = "http://localhost:8080/root/student-signup";
-            const response = await fetch(url, {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(signupInfo)
-            })
-            const result = await response.json();
-            console.log(result);
-            const {success, message, error} = result;
-            if(success){
-                handleSuccess(message);
-                setTimeout(()=>{
-                    navigate('/home')
-                },1000);
-            }else if(error){
-                const details = error.details[0].message;
-                handleError(details);
-            }else if(!success){
-                handleError(message);
-            }
+      const result = await response.json();
+      const { success, message, error } = result;
 
-            console.log(result);
-
-        }catch(err){
-            handleError(err);
-        }
+      if (success) {
+        handleSuccess(message);
+        setTimeout(() => {
+          navigate("/home");
+        }, 1000);
+      } else if (error) {
+        const details = error.details?.[0]?.message || message;
+        handleError(details);
+      } else {
+        handleError(message);
+      }
+    } catch (err) {
+      handleError("Something went wrong.");
     }
+  };
 
+  return (
+    <div className="min-h-screen w-full flex justify-center items-center bg-gray-100 px-4">
+      <div className="bg-white p-8 sm:p-12 shadow-[8px_8px_24px_0px_rgba(66,68,90,1)] max-w-4xl w-full rounded-md">
 
-    return (
-        <div className="container">
-             <h1>Student Signup</h1>
-            <form onSubmit={handleSignup}>
-                <div>
-                    <div >
-                        <div>
-                            <label htmlFor="name">Name</label>
-                            <input 
-                            onChange={handleChange}
-                            type="text" 
-                            autoFocus
-                            placeholder="Enter the name" 
-                            name="name"
-                            value={signupInfo.name}
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="email">Email</label>
-                            <input 
-                            onChange={handleChange}
-                            type="text" 
-                            autoFocus
-                            placeholder="Enter the email" 
-                            name="email"
-                            value={signupInfo.email}
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="institute">Institute</label>
-                            <input 
-                            onChange={handleChange}
-                            type="text" 
-                            autoFocus
-                            placeholder="Enter the institute" 
-                            name="institute"
-                            value={signupInfo.institute}
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="department">Department</label>
-                            <input 
-                            onChange={handleChange}
-                            type="text" 
-                            placeholder="Enter the department" 
-                            name="department"
-                            value={signupInfo.department}
-                            />
-                        </div>
-                    </div>
-                    <div >
-                        <div>
-                            <label htmlFor="semester">Semester</label>
-                            <input 
-                            onChange={handleChange}
-                            type="text" 
-                            placeholder="Enter the semester" 
-                            name="semester"
-                            value={signupInfo.semester}
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="registration_no">Registration Number</label>
-                            <input 
-                            onChange={handleChange}
-                            type="text" 
-                            placeholder="Enter the registration number" 
-                            name="registration_no"
-                            value={signupInfo.registration_no}
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="roll_no">Roll Number</label>
-                            <input 
-                            onChange={handleChange}
-                            type="text" 
-                            placeholder="Enter the roll number" 
-                            name="roll_no"
-                            value={signupInfo.roll_no}
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="password">Password</label>
-                            <input 
-                            onChange={handleChange}
-                            type="password" 
-                            placeholder="Enter the password"  
-                            name="password"
-                            value={signupInfo.password}
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                <button type="submit">Signup</button>
-                <span>Already have an account?
-                    <Link to="/student-login" style={{color:"blue"}}> Login</Link>
-                </span>
-            </form>
-
-            <ToastContainer/>
+        {/* Header with back button */}
+        <div className="flex items-center justify-center mb-6 relative">
+          <button
+            onClick={() => navigate("/")}
+            className="absolute left-0 flex items-center gap-2 bg-gray-200 text-gray-800 hover:text-blue-600 px-4 py-2 rounded-lg transition cursor-pointer"
+          >
+            <IoArrowBackOutline />
+            <span>Back</span>
+          </button>
+          <h1 className="text-xl md:text-2xl font-bold text-gray-800 text-center">
+            Student Signup
+          </h1>
         </div>
-    );
+
+        <form
+          onSubmit={handleSignup}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+        >
+          {/* Form Inputs */}
+          {[
+            { label: "Name", name: "name" },
+            { label: "Email", name: "email" },
+            { label: "Institute", name: "institute" },
+            { label: "Department", name: "department" },
+            { label: "Semester", name: "semester" },
+            { label: "Registration Number", name: "registration_no" },
+            { label: "Roll Number", name: "roll_no" },
+            { label: "Password", name: "password", type: "password" },
+          ].map(({ label, name, type = "text" }) => (
+            <div className="flex flex-col" key={name}>
+              <label htmlFor={name} className="text-lg mb-1">
+                {label}
+              </label>
+              <input
+                onChange={handleChange}
+                type={type}
+                name={name}
+                value={signupInfo[name]}
+                placeholder={`Enter your ${label.toLowerCase()}`}
+                className="text-lg p-2 border-b border-black outline-none placeholder:text-sm placeholder:italic"
+              />
+            </div>
+          ))}
+
+          <div className="md:col-span-2 flex flex-col items-center">
+            <button
+              type="submit"
+              className="cursor-pointer w-full bg-teal-400 hover:bg-teal-500 text-white font-semibold text-lg py-2 rounded-lg shadow-md transition duration-300"
+            >
+              Signup
+            </button>
+
+            <span className="text-sm mt-3 text-gray-600">
+              Already have an account?
+              <Link
+                to="/student-login"
+                className="text-blue-600 font-medium ml-1"
+              >
+                Login
+              </Link>
+            </span>
+          </div>
+        </form>
+
+        <ToastContainer />
+      </div>
+    </div>
+  );
 }
 
 export default Student_Signup;

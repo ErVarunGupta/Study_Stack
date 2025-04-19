@@ -1,21 +1,15 @@
-import { useParams, useNavigate } from 'react-router-dom';
-import {useEffect, useState } from 'react';
-import {handleError, handleSuccess} from '../utils';
-import { useLocation } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { handleError, handleSuccess } from '../utils';
 import { ToastContainer } from 'react-toastify';
-import './EditForm.css';
 import { IoArrowBackOutline } from "react-icons/io5";
 import { FaBackward } from "react-icons/fa";
 
 const EditForm = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-
-
     const location = useLocation();
     const data = location.state;
-
-    // console.log("Received data:", data);    //debugging line
 
     const [formData, setFormData] = useState({
         title: '',
@@ -25,10 +19,10 @@ const EditForm = () => {
         semester: '',
         pdfUrl: '',
     });
-    
+
     useEffect(() => {
         if (!data) {
-            navigate('/home'); // fallback redirect
+            navigate('/home');
         } else {
             setFormData({
                 title: data.title || '',
@@ -45,7 +39,6 @@ const EditForm = () => {
     const query = new URLSearchParams(search);
     const type = query.get('type');
 
-
     const handleChange = (e) => {
         setFormData(prev => ({
             ...prev,
@@ -57,7 +50,6 @@ const EditForm = () => {
         e.preventDefault();
         const token = localStorage.getItem('token');
 
-        // Build payload depending on type
         const payload = type === 'book'
             ? {
                 title: formData.title,
@@ -73,102 +65,151 @@ const EditForm = () => {
                 pdfUrl: formData.pdfUrl,
             };
 
-        const result = await fetch(`http://localhost:8080/action/edit/${id}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `${token}`,
-            },
-            body: JSON.stringify(payload),
-        });
+        try {
+            const result = await fetch(`http://localhost:8080/action/edit/${id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${token}`,
+                },
+                body: JSON.stringify(payload),
+            });
 
+            const { success, message, error } = await result.json();
 
-        const { success, message, error } = await result.json();
-       
-        if(success){
-            handleSuccess(message);
-            setTimeout(() => {
-            navigate(-1); // Navigate to the previous page after success
-            }, 1000);
+            if (success) {
+                handleSuccess(message);
+                setTimeout(() => {
+                    navigate(-1);
+                }, 1000);
+            } else if (error) {
+                const details = error.details?.[0]?.message || message;
+                handleError(details);
+            } else {
+                handleError(message);
+            }
+        } catch (err) {
+            handleError("Something went wrong.");
         }
-        if(error){
-            const details = error.details[0].message;
-            handleError(details);
-        }
-        if(!success){
-            handleError(message);
-        }
-
-        
     };
 
     return (
-        <div className="container edit-form">
-            <form onSubmit={handleSubmit}>
-                <h1>Edit {type === 'book' ? 'Book' : 'Notebook'} PDF</h1>
-                <div>
-                    <div className='left'>
+        <div className="min-h-screen bg-gray-100 flex flex-col items-center p-6">
+            <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-3xl">
+
+                {/* Header: Back | Title | Home */}
+                <div className="flex items-center justify-between mb-6">
+                    <button
+                        onClick={() => navigate(-1)}
+                        className="flex items-center gap-2 bg-gray-200 text-gray-800 hover:text-blue-600 px-4 py-2 rounded-lg transition cursor-pointer"
+                    >
+                        <IoArrowBackOutline />
+                        <span>Back</span>
+                    </button>
+
+                    <h1 className="text-xl md:text-2xl font-bold text-gray-800 text-center">
+                        Edit {type === 'book' ? 'Book' : 'Notebook'} PDF
+                    </h1>
+
+                    <button
+                        onClick={() => navigate('/home')}
+                        className="flex items-center gap-2 bg-gray-200 text-gray-800 hover:text-green-600 px-4 py-2 rounded-lg transition cursor-pointer"
+                    >
+                        <FaBackward />
+                        <span>Home</span>
+                    </button>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {type === 'book' && (
                             <>
-                                <div className='info'>
-                                    <label htmlFor="title">Title</label>
-                                    <input type="text" name="title" value={formData.title} onChange={handleChange} placeholder="Enter the title" />
+                                <div>
+                                    <label className="block text-gray-700">Title</label>
+                                    <input
+                                        type="text"
+                                        name="title"
+                                        value={formData.title}
+                                        onChange={handleChange}
+                                        placeholder="Enter title"
+                                        className="w-full mt-2 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                    />
                                 </div>
-                                <div className='info'>
-                                    <label htmlFor="author">Author Name</label>
-                                    <input type="text" name="author" value={formData.author} onChange={handleChange} placeholder="Enter the author" />
+                                <div>
+                                    <label className="block text-gray-700">Author Name</label>
+                                    <input
+                                        type="text"
+                                        name="author"
+                                        value={formData.author}
+                                        onChange={handleChange}
+                                        placeholder="Enter author name"
+                                        className="w-full mt-2 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                    />
                                 </div>
                             </>
                         )}
 
                         {type === 'notebook' && (
-                            <>
-                                <div className='info'>
-                                    <label htmlFor="subject">Subject</label>
-                                    <input type="text" name="subject" value={formData.subject} onChange={handleChange} placeholder="Enter the subject" />
-                                </div>
-                            </>
+                            <div>
+                                <label className="block text-gray-700">Subject</label>
+                                <input
+                                    type="text"
+                                    name="subject"
+                                    value={formData.subject}
+                                    onChange={handleChange}
+                                    placeholder="Enter subject"
+                                    className="w-full mt-2 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                />
+                            </div>
                         )}
 
-                        <div className='info'>
-                            <label htmlFor="department">Department</label>
-                            <input type="text" name="department" value={formData.department} onChange={handleChange} placeholder="Enter department" />
+                        <div>
+                            <label className="block text-gray-700">Department</label>
+                            <input
+                                type="text"
+                                name="department"
+                                value={formData.department}
+                                onChange={handleChange}
+                                placeholder="Enter department"
+                                className="w-full mt-2 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                            />
                         </div>
-                    </div>
-                    <div className='right'>
-                        <div className='info'>
-                            <label htmlFor="semester">Semester</label>
-                            <input type="text" name="semester" value={formData.semester} onChange={handleChange} placeholder="Enter the semester" />
-                        </div>
-                        <div className='info'>
-                            <label htmlFor="pdfUrl">PDF URL</label>
-                            <input type="text" name="pdfUrl" value={formData.pdfUrl} onChange={handleChange} placeholder=" Enter PDF URL" />
-                        </div>
-                    </div>
-                </div>
-                <button type="submit">Update</button>
-            </form>
 
-             <div className="navigation-buttons">
-                <div className="back-button" onClick={() => {
-                    if (window.history.length > 2) {
-                        navigate(-1);
-                    } else {
-                        navigate('/');
-                    }
-                }}>
-                    <IoArrowBackOutline />
-                    <span>Back</span>
-                </div>
-                <div className="home-button" onClick={() => window.location.href = '/home'}>
-                    <FaBackward />
-                    <span >
-                        Home
-                    </span>
-                </div>
+                        <div>
+                            <label className="block text-gray-700">Semester</label>
+                            <input
+                                type="text"
+                                name="semester"
+                                value={formData.semester}
+                                onChange={handleChange}
+                                placeholder="Enter semester"
+                                className="w-full mt-2 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                            />
+                        </div>
+
+                        <div className="md:col-span-2">
+                            <label className="block text-gray-700">PDF URL</label>
+                            <input
+                                type="text"
+                                name="pdfUrl"
+                                value={formData.pdfUrl}
+                                onChange={handleChange}
+                                placeholder="Enter PDF URL"
+                                className="w-full mt-2 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                            />
+                        </div>
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="w-full bg-blue-600 text-white py-3 mt-4 rounded-md hover:bg-blue-700 transition cursor-pointer"
+                    >
+                        Update
+                    </button>
+                </form>
             </div>
 
-            <ToastContainer/>
+            <ToastContainer />
         </div>
     );
 };

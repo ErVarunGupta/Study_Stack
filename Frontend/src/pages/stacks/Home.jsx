@@ -1,32 +1,44 @@
-import React, {useState, useEffect } from 'react';
-
+import React, { useState, useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
-import './Home.css';
 import HandleLogout from '../HandleLogout.jsx';
 
 function Home() {
-    const [loggedInUser, setLoggedInUser] = React.useState('');
-    useEffect(() =>{
-        setLoggedInUser(localStorage.getItem('loggedInUser'));
-    },[loggedInUser]);
-    
-    
-    
-    return (
-        <div className="container home-container">
-            <h1>Welcome to the Study Stack!</h1>
-            <h2>username: @{loggedInUser.toLowerCase()}</h2>
+  const [loggedInUser, setLoggedInUser] = useState('');
 
-            <div className="home">
-                <button className="write-btn" onClick={() => window.location.href = '/write'}>Write</button>
-                <button className="read-btn" onClick={() => window.location.href = '/read'}>Read</button>
-            </div>
+  useEffect(() => {
+    setLoggedInUser(localStorage.getItem('loggedInUser') || '');
+  }, []);
 
-            {/* <button onClick={handleLogout} style={{background:"#FF4D4F", color:"#fff"}}>Logout</button> */}
-            <HandleLogout loggedInUser={loggedInUser}/>
-            <ToastContainer /> 
-        </div>
-    )
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
+      <h1 className="text-4xl font-bold text-gray-800 mb-4">
+        Welcome to the Study Stack!
+      </h1>
+
+      <h2 className="text-xl italic text-gray-600 mb-6">
+        username: @{loggedInUser.toLowerCase()}
+      </h2>
+
+      <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md flex flex-col gap-4 items-center">
+        <button
+          className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition cursor-pointer"
+          onClick={() => window.location.href = '/write'}
+        >
+          Write
+        </button>
+
+        <button
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition cursor-pointer"
+          onClick={() => window.location.href = '/read'}
+        >
+          Read
+        </button>
+      </div>
+
+      <HandleLogout loggedInUser={loggedInUser} />
+      <ToastContainer />
+    </div>
+  );
 }
 
 export default Home;
