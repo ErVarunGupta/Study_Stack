@@ -65,7 +65,7 @@ function Faculty_Signup() {
         {/* Header with Back button */}
         <div className="flex items-center justify-center mb-6 relative">
           <button
-            onClick={() => navigate("/")}
+            onClick={() => navigate(-1)}
             className="absolute left-0 flex items-center gap-2 bg-gray-200 text-gray-800 hover:text-blue-600 px-4 py-2 rounded-lg transition cursor-pointer"
           >
             <IoArrowBackOutline />

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 import HandleLogout from '../HandleLogout.jsx';
+import ViewUser from '../view.jsx';
 
 function Home() {
   const [loggedInUser, setLoggedInUser] = useState('');
@@ -11,6 +12,7 @@ function Home() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
+      <ViewUser/>
       <h1 className="text-4xl font-bold text-gray-800 mb-4">
         Welcome to the Study Stack!
       </h1>
@@ -35,7 +37,7 @@ function Home() {
         </button>
       </div>
 
-      <HandleLogout loggedInUser={loggedInUser} />
+      {/* <HandleLogout loggedInUser={loggedInUser} /> */}
       <ToastContainer />
     </div>
   );

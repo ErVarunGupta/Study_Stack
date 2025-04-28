@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { handleError, handleSuccess } from '../utils';
 import { IoArrowBackOutline } from "react-icons/io5";
 import { FaBackward } from "react-icons/fa";
+import ViewUser from "../view";
+import { IoMdHome } from "react-icons/io";
 
 function Write_Book() {
     const [bookInfo, setBookInfo] = useState({
@@ -69,8 +71,8 @@ function Write_Book() {
                         onClick={() => navigate('/write')}
                         className="flex items-center gap-2 text-gray-700 hover:text-blue-600 bg-gray-100 px-4 py-2 rounded-lg cursor-pointer"
                     >
-                        <IoArrowBackOutline />
-                        <span>Back</span>
+                        <IoArrowBackOutline className="text-lg "/>
+                        
                     </button>
 
                     <h1 className="text-xl md:text-2xl font-bold text-gray-800 text-center">Book Info</h1>
@@ -79,8 +81,8 @@ function Write_Book() {
                         onClick={() => navigate('/home')}
                         className="flex items-center gap-2 text-gray-700 hover:text-green-600 bg-gray-100 px-4 py-2 rounded-lg cursor-pointer"
                     >
-                        <FaBackward />
-                        <span>Home</span>
+                        <IoMdHome className="text-lg"/>
+                        
                     </button>
                 </div>
 
@@ -144,6 +146,17 @@ function Write_Book() {
                                 className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
                             />
                         </div>
+                        {/* <div>
+                            <label htmlFor="pdf" className="block text-gray-700">PDF</label>
+                            <input
+                                onChange={handleChange}
+                                type="file"
+                                placeholder="Enter the PDF file"
+                                name="pdf"
+                                value={bookInfo.pdf}
+                                className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                            />
+                        </div> */}
                     </div>
 
                     <button
@@ -157,6 +170,7 @@ function Write_Book() {
             </div>
 
             <ToastContainer />
+            <ViewUser />
         </div>
     );
 }

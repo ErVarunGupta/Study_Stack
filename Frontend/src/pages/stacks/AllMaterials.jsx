@@ -6,6 +6,8 @@ import { ToastContainer } from 'react-toastify';
 import { IoArrowBackOutline } from "react-icons/io5";
 import { FaBackward } from "react-icons/fa";
 import { handleError, handleSuccess } from '../utils';
+import ViewUser from '../view.jsx';
+import { IoMdHome } from "react-icons/io";
 
 function SearchResult() {
     const location = useLocation();
@@ -130,17 +132,39 @@ function SearchResult() {
         }
     };
 
+    //searchHandle
+    const [query1, setQuery1] = useState('');
+    const [filteredData, setFilteredData] = useState(data);
+
+    useEffect(() => {
+        const searchQuery = query1.toLowerCase();
+
+        if (!searchQuery) {
+            setFilteredData(data);
+        } else {
+            const newData = data.filter(item => {
+                const value = type === "book" ? item.title : item.subject;
+                return value.toLowerCase().includes(searchQuery);
+            });
+            setFilteredData(newData);
+        }
+    }, [query1, data, type]);
+
     return (
-        <div className="h-screen bg-gray-50 font-sans flex flex-col px-6 py-4">
+        <div className="scroll-hide h-screen bg-gray-50 font-sans flex flex-col px-6 py-4 overflow-hidden">
             {/* Header */}
-            <div className="flex justify-between items-center h-16 sticky top-0 bg-white z-20 rounded-lg shadow-lg">
+            <div className=" gap-2 2xl:w-4xl md:w-md mx-auto flex justify-between items-center h-16 sticky top-0 bg-white z-20 rounded-lg shadow-lg">
                 <button className="flex items-center bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 cursor-pointer" onClick={() => navigate(-1)}>
-                    <IoArrowBackOutline className="mr-2 text-xl" /> Back
+                    <IoArrowBackOutline className="mr-2 text-xl" /> 
                 </button>
-                <h2 className="text-2xl font-semibold text-gray-800 text-center">{type.charAt(0).toUpperCase() + type.slice(1)}s for {department} - Semester {semester}</h2>
-                <button className="flex items-center bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 cursor-pointer" onClick={() => window.location.href = '/home'}>
-                    <FaBackward className="mr-2 text-xl" /> Home
+                <h3 className="text-2xl font-semibold text-gray-800 text-center">{type.charAt(0).toUpperCase() + type.slice(1)}s for {department} - Semester {semester}</h3>
+                <button className="flex items-center bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 cursor-pointer " onClick={() => window.location.href = '/home'}>
+                    <IoMdHome className="mr-2 text-xl " /> 
                 </button>
+            </div>
+            <div className="search 2xl:w-xl sm:w-md flex justify-center items-center border border-gray-200 rounded-lg mt-4 mx-auto p-2 shadow-md bg-white">
+                <input type="text" onChange={(e) => setQuery1(e.target.value)} placeholder={`Enter the ${type} name`} className='p-2 w-full outline-none'/>
+                {/* <button className='bg-slate-200 p-2 rounded-lg cursor-pointer' onClick={searchHandle}>Search</button> */}
             </div>
 
             {/* Content Section */}
@@ -149,8 +173,8 @@ function SearchResult() {
                     <p className="text-xl text-gray-500">Loading...</p>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                        {data.length > 0 ? (
-                            data.map((item, idx) => (
+                        {filteredData.length > 0 ? (
+                            filteredData.map((item, idx) => (
                                 <div className="bg-white p-6 rounded-lg shadow-lg transform transition-all duration-300 hover:translate-y-2 hover:shadow-xl flex flex-col items-center text-center" key={idx}>
                                     <img
                                         src={item.imageUrl || 'https://cdn.pixabay.com/photo/2014/09/05/18/32/old-books-436498_1280.jpg'}
@@ -158,8 +182,8 @@ function SearchResult() {
                                         className="w-full h-40 object-cover rounded-lg mb-4"
                                     />
                                     <h3 className="text-lg font-semibold text-gray-800 mb-2">{item.title}</h3>
-                                    <h4 className="text-sm text-gray-500 mb-4">{item.subject}</h4>
-                                    <p className="text-sm text-gray-500 mb-4">Uploaded By: {uploader[item.uploadedBy] || "Loading..."}</p>
+                                    <h3 className="text-sm font-semibold text-gray-800 mb-4">{item.subject}</h3>
+                                    <p className="text-sm text-gray-500 mb-4 italic">Uploaded By: {uploader[item.uploadedBy] || "Loading..."}</p>
                                     <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 mb-4 cursor-pointer" onClick={() => window.open(item.pdfUrl, '_blank')}>
                                         View
                                     </button>
@@ -177,8 +201,9 @@ function SearchResult() {
             </div>
 
             {/* Fixed Footer (Logout) */}
-            <HandleLogout loggedInUser={localStorage.getItem('loggedInUser')} />
+            {/* <HandleLogout loggedInUser={localStorage.getItem('loggedInUser')} /> */}
             <ToastContainer />
+            <ViewUser />
         </div>
     );
 }

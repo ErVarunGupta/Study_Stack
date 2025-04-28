@@ -14,6 +14,9 @@ import Write_Book from './pages/stacks/WriteBook.jsx';
 import SearchResult from './pages/stacks/AllMaterials.jsx';
 import EditForm from './pages/stacks/EditForm.jsx';
 
+import Edit_Faculty_Profile from './pages/faculty/Edit.jsx';
+import Edit_Student_Profile from './pages/student/Edit.jsx';
+
 function App() {
 
   return (
@@ -37,6 +40,9 @@ function App() {
           <Route path='/read/seen' element={<ReadSeen/>}></Route>
           <Route path='/read/search' element={<SearchResult/>}></Route>
           <Route path='/action/edit/:id' element={<EditForm/>}></Route>
+
+          <Route path='/student-edit' element={<Edit_Student_Profile/>}></Route>
+          <Route path='/faculty-edit' element={<Edit_Faculty_Profile/>}></Route>
           
           {/* Redirect to home if no match */}
         </Routes>

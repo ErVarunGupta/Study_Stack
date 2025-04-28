@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { handleError, handleSuccess } from '../utils';
 import { ToastContainer } from 'react-toastify';
 import { IoArrowBackOutline } from "react-icons/io5";
-import { FaBackward } from "react-icons/fa";
+import { IoMdHome } from "react-icons/io";
 
 const EditForm = () => {
     const { id } = useParams();
@@ -103,8 +103,7 @@ const EditForm = () => {
                         onClick={() => navigate(-1)}
                         className="flex items-center gap-2 bg-gray-200 text-gray-800 hover:text-blue-600 px-4 py-2 rounded-lg transition cursor-pointer"
                     >
-                        <IoArrowBackOutline />
-                        <span>Back</span>
+                        <IoArrowBackOutline className="text-lg"/>
                     </button>
 
                     <h1 className="text-xl md:text-2xl font-bold text-gray-800 text-center">
@@ -115,8 +114,7 @@ const EditForm = () => {
                         onClick={() => navigate('/home')}
                         className="flex items-center gap-2 bg-gray-200 text-gray-800 hover:text-green-600 px-4 py-2 rounded-lg transition cursor-pointer"
                     >
-                        <FaBackward />
-                        <span>Home</span>
+                        <IoMdHome className="text-lg"/>
                     </button>
                 </div>
 

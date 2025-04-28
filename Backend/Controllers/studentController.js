@@ -83,6 +83,7 @@ export const studentLogin = async (req, res)=>{
             semester: student.semester,
             registration_no: student.registration_no,
             roll_no: student.roll_no,
+            category: student.category,
             token
         });
     }catch(err){

@@ -84,6 +84,7 @@ export const facultyLogin = async (req, res)=>{
             contact: faculty.contact,
             institute: faculty.institute,
             department: faculty.department,
+            category: faculty.catogory,
             token
         });
     }catch(err){

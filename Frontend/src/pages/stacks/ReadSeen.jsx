@@ -3,7 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import HandleLogout from '../HandleLogout.jsx';
 import { ToastContainer } from 'react-toastify';
 import { IoArrowBackOutline } from "react-icons/io5";
-import { FaBackward } from "react-icons/fa";
+import { IoMdHome } from "react-icons/io";
+import ViewUser from '../view.jsx';
 
 function ReadSeen() {
   const [loggedInUser, setLoggedInUser] = useState('');
@@ -70,13 +71,14 @@ function ReadSeen() {
           className="flex items-center gap-2 cursor-pointer bg-gray-200 text-gray-800 hover:text-green-600 px-4 py-2 rounded-lg transition"
           onClick={() => window.location.href = '/home'}
         >
-          <FaBackward />
+          <IoMdHome />
           <span>Home</span>
         </div>
       </div>
 
-      <HandleLogout loggedInUser={loggedInUser} />
+      {/* <HandleLogout loggedInUser={loggedInUser} /> */}
       <ToastContainer />
+      <ViewUser/>
     </div>
   );
 }

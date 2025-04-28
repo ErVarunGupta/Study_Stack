@@ -15,11 +15,13 @@ function HandleLogout({ loggedInUser }) {
     }, 1000);
   };
 
+  //fixed bottom-2 left-16 transform -translate-x-1/2 z-50
+
   return (
-    <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50">
+    <div className="">
       <button
         onClick={handleLogout}
-        className="bg-red-500 hover:bg-red-400 text-white px-6 py-2 rounded-md shadow-lg transition duration-300 text-lg font-medium cursor-pointer"
+        className="bg-red-500 hover:bg-red-400 text-white px-4 py-2 rounded-md shadow-lg transition duration-300 text-md font-medium cursor-pointer"
       >
         Logout
       </button>

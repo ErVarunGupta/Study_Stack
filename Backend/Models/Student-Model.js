@@ -36,6 +36,10 @@ const studentSchema = new Schema({
     password:{
         type: String, 
         required: true
+    },
+    category:{
+        type: String,
+        default: "student"
     }
 })
 

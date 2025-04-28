@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { handleError, handleSuccess } from '../utils';
 import { IoArrowBackOutline } from "react-icons/io5";
 import { FaBackward } from "react-icons/fa";
+import ViewUser from "../view";
+import { IoMdHome } from "react-icons/io";
 
 function Write_Notebook() {
     const [notebookInfo, setNotebookInfo] = useState({
@@ -68,8 +70,7 @@ function Write_Notebook() {
                         onClick={() => navigate('/write')}
                         className="flex items-center gap-2 bg-gray-200 text-gray-800 hover:text-blue-600 px-4 py-2 rounded-lg transition cursor-pointer"
                     >
-                        <IoArrowBackOutline />
-                        <span>Back</span>
+                        <IoArrowBackOutline className="text-lg"/>
                     </button>
 
                     <h1 className="text-xl md:text-2xl font-bold text-gray-800 text-center">Notebook Info</h1>
@@ -78,8 +79,7 @@ function Write_Notebook() {
                         onClick={() => navigate('/home')}
                         className="flex items-center gap-2 bg-gray-200 text-gray-800 hover:text-green-600 px-4 py-2 rounded-lg transition cursor-pointer"
                     >
-                        <FaBackward />
-                        <span>Home</span>
+                        <IoMdHome className="text-lg"/>
                     </button>
                 </div>
 
@@ -129,6 +129,17 @@ function Write_Notebook() {
                                 className="border border-gray-300 rounded-lg p-3"
                             />
                         </div>
+                        <div className="flex flex-col space-y-2">
+                            <label htmlFor="pdfUrl" className="font-medium text-gray-600">PDF FILE</label>
+                            <input
+                                onChange={handleChange}
+                                type="file"
+                                placeholder="Enter the PDF URL"
+                                name="pdfUrl"
+                                value={notebookInfo.pdfUrl}
+                                className="border border-gray-300 rounded-lg p-3"
+                            />
+                        </div>
                         <button
                             type="submit"
                             className="w-full py-3 mt-6 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition cursor-pointer"
@@ -140,6 +151,9 @@ function Write_Notebook() {
             </div>
 
             <ToastContainer />
+            <ViewUser />
+
+            {/* Footer */}
         </div>
     );
 }

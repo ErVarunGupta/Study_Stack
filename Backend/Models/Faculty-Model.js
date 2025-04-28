@@ -27,7 +27,11 @@ const facultySchema = new Schema({
     password:{
         type: String, 
         required: true
-    }
+    },
+    category:{
+        type: String,
+        default: "faculty"
+    },
 })
 
 const FacultyModel = mongoose.model('faculty', facultySchema);
