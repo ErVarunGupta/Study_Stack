@@ -5,6 +5,8 @@ import { ToastContainer } from 'react-toastify';
 import { IoArrowBackOutline } from "react-icons/io5";
 import { IoMdHome } from "react-icons/io";
 
+const URL = import.meta.env.VITE_URL || "http://localhost:8080";
+
 const EditForm = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -66,7 +68,7 @@ const EditForm = () => {
             };
 
         try {
-            const result = await fetch(`http://localhost:8080/action/edit/${id}`, {
+            const result = await fetch(`${URL}/action/edit/${id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import HandleLogout from '../HandleLogout.jsx';
 import { ToastContainer } from 'react-toastify';
 import { IoArrowBackOutline } from "react-icons/io5";
 import { IoMdHome } from "react-icons/io";

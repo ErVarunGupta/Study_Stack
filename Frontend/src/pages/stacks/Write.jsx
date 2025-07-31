@@ -1,5 +1,4 @@
 
-import HandleLogout from '../HandleLogout';
 import React, { useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { IoArrowBackOutline } from "react-icons/io5";

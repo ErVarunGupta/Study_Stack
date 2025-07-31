@@ -21,7 +21,7 @@ function App() {
 
   return (
     <>
-      <div>
+      <div >
         {/* <h1>Shree Ganeshay Namah!</h1> */}
         <Routes>
           <Route path='/' element={<Root/>}></Route>

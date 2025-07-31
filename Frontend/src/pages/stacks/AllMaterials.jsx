@@ -9,6 +9,8 @@ import { handleError, handleSuccess } from '../utils';
 import ViewUser from '../view.jsx';
 import { IoMdHome } from "react-icons/io";
 
+const URL = import.meta.env.VITE_URL || "http://localhost:8080";
+
 function SearchResult() {
     const location = useLocation();
     const [data, setData] = useState([]);
@@ -25,7 +27,7 @@ function SearchResult() {
     useEffect(() => {
         if (department && semester && type) {
             axios
-                .get(`http://localhost:8080/stack/read/search`, { params: { department, semester, type } })
+                .get(`${URL}/stack/read/search`, { params: { department, semester, type } })
                 .then((res) => {
                     setData(res.data);
                     setLoading(false);
@@ -41,7 +43,7 @@ function SearchResult() {
     const fetchUser = async (userId) => {
         try {
             const token = localStorage.getItem('token');
-            const url = `http://localhost:8080/root/${userId}`;
+            const url = `${URL}/root/${userId}`;
             const response = await fetch(url, {
                 method: "GET",
                 headers: { 'Content-Type': 'application/json', 'Authorization': `${token}` }
@@ -76,7 +78,7 @@ function SearchResult() {
         const token = localStorage.getItem('token');
         const type = query.get('type');
         try {
-            const url = `http://localhost:8080/action/edit/${id}`;
+            const url = `${URL}/action/edit/${id}`;
             const response = await fetch(url, {
                 method: "GET",
                 headers: {
@@ -105,7 +107,7 @@ function SearchResult() {
     const deleteHandle = async (id) => {
         const token = localStorage.getItem('token');
         try {
-            const url = `http://localhost:8080/action/delete/${id}`;
+            const url = `${URL}/action/delete/${id}`;
             const response = await fetch(url, {
                 method: "DELETE",
                 headers: {

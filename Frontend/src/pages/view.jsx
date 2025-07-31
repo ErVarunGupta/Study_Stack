@@ -5,6 +5,8 @@ import { handleError, handleSuccess } from "./utils";
 import HandleLogout from './HandleLogout.jsx';
 import { IoPersonSharp } from "react-icons/io5";
 
+const URL = import.meta.env.VITE_URL || "http://localhost:8080";
+
 const ViewUser = () => {
     const [user, setUser] = useState({});
     const [showCard, setShowCard] = useState(false);
@@ -23,7 +25,7 @@ const ViewUser = () => {
                 const decodedToken = JSON.parse(atob(token.split('.')[1]));
                 const id = decodedToken.id;
 
-                const response = await fetch(`http://localhost:8080/root/view/${id}`, {
+                const response = await fetch(`${URL}/root/view/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

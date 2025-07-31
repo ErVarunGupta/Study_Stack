@@ -5,6 +5,8 @@ import { handleError, handleSuccess } from "../utils";
 import { IoArrowBackOutline } from "react-icons/io5";
 import "react-toastify/dist/ReactToastify.css";
 
+const URL = import.meta.env.VITE_URL || "http://localhost:8080";
+
 function Edit_Student_Profile() {
     const navigate = useNavigate();
     const location = useLocation();
@@ -66,7 +68,7 @@ function Edit_Student_Profile() {
         // console.log("edit page: ",editInfo); 
 
         try {
-            const result = await fetch(`http://localhost:8080/root/edit/${id}`, {
+            const result = await fetch(`${URL}/root/edit/${id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',

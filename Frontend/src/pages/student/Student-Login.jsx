@@ -5,6 +5,8 @@ import { handleError, handleSuccess } from "../utils";
 import { IoArrowBackOutline } from "react-icons/io5";
 import "react-toastify/dist/ReactToastify.css";
 
+const URL = import.meta.env.VITE_URL || "http://localhost:8080";
+
 function Student_Login() {
   const [loginInfo, setLoginInfo] = useState({
     identifier: "",
@@ -27,7 +29,7 @@ function Student_Login() {
     }
 
     try {
-      const url = "http://localhost:8080/root/student-login";
+      const url = `${URL}/root/student-login`;
       const response = await fetch(url, {
         method: "POST",
         headers: {

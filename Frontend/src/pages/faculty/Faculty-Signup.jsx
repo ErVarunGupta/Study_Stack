@@ -5,6 +5,8 @@ import { handleError, handleSuccess } from "../utils";
 import { IoArrowBackOutline } from "react-icons/io5";
 import "react-toastify/dist/ReactToastify.css";
 
+const URL = import.meta.env.VITE_URL || "http://localhost:8080";
+
 function Faculty_Signup() {
   const [signupInfo, setSignupInfo] = useState({
     name: "",
@@ -30,7 +32,7 @@ function Faculty_Signup() {
     }
 
     try {
-      const url = "http://localhost:8080/root/faculty-signup";
+      const url = `${URL}/root/faculty-signup`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
