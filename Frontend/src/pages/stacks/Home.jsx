@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 import HandleLogout from '../HandleLogout.jsx';
 import ViewUser from '../view.jsx';
-
+import { useNavigate } from 'react-router-dom';
 
 
 function Home() {
+  const navigate = useNavigate();
   const [loggedInUser, setLoggedInUser] = useState('');
 
   useEffect(() => {
@@ -26,14 +27,14 @@ function Home() {
       <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md flex flex-col gap-4 items-center">
         <button
           className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition cursor-pointer"
-          onClick={() => window.location.href = '/write'}
+          onClick={() => navigate('/write')}
         >
           Write
         </button>
 
         <button
           className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition cursor-pointer"
-          onClick={() => window.location.href = '/read'}
+          onClick={() => navigate('/read')}
         >
           Read
         </button>

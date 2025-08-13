@@ -38,7 +38,7 @@ function Student_Login() {
         body: JSON.stringify(loginInfo),
       });
 
-      // console.log('response:', response);
+      console.log('response:', response);
       const result = await response.json();
       const { success, message, token, name, error } = result;
 

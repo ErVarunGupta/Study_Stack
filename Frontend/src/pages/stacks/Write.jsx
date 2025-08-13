@@ -4,8 +4,10 @@ import { ToastContainer } from 'react-toastify';
 import { IoArrowBackOutline } from "react-icons/io5";
 import { IoMdHome } from "react-icons/io";
 import ViewUser from '../view';
+import { useNavigate } from 'react-router-dom';
 
 function Write() {
+    const navigate = useNavigate();
     const [loggedInUser, setLoggedInUser] = React.useState('');
     useEffect(() => {
         setLoggedInUser(localStorage.getItem('loggedInUser'));
@@ -20,14 +22,14 @@ function Write() {
                 <div className="space-y-4">
                     <button
                         style={{ background: "#1D4ED8", color: "#fff" }}
-                        onClick={() => window.location.href = '/write/book'}
+                        onClick={() => navigate('/write/book')}
                         className="w-full py-3 rounded-lg text-white hover:bg-blue-700 transition cursor-pointer"
                     >
                         Book
                     </button>
                     <button
                         style={{ background: "#10B981", color: "#fff" }}
-                        onClick={() => window.location.href = '/write/notebook'}
+                        onClick={() => navigate('/write/notebook')}
                         className="w-full py-3 rounded-lg text-white hover:bg-green-700 transition cursor-pointer"
                     >
                         Notebook
@@ -38,7 +40,7 @@ function Write() {
             <div className="flex gap-6 mt-8">
                 <div
                     className="flex items-center gap-2 cursor-pointer bg-gray-200 text-gray-800 hover:text-blue-600 px-4 py-2 rounded-lg transition"
-                    onClick={() => window.location.href = '/home'}
+                    onClick={() => navigate('/home')}
                 >
                     <IoArrowBackOutline />
                     <span>Back</span>
@@ -46,7 +48,7 @@ function Write() {
 
                 <div
                     className="flex items-center gap-2 cursor-pointer bg-gray-200 text-gray-800 hover:text-green-600 px-4 py-2 rounded-lg transition"
-                    onClick={() => window.location.href = '/home'}
+                    onClick={() => navigate('/home')}
                 >
                     <IoMdHome />
                     <span>Home</span>

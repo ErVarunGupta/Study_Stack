@@ -160,7 +160,7 @@ function SearchResult() {
                     <IoArrowBackOutline className="mr-2 text-xl" /> 
                 </button>
                 <h3 className="text-2xl font-semibold text-gray-800 text-center">{type.charAt(0).toUpperCase() + type.slice(1)}s for {department} - Semester {semester}</h3>
-                <button className="flex items-center bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 cursor-pointer " onClick={() => window.location.href = '/home'}>
+                <button className="flex items-center bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 cursor-pointer " onClick={() => navigate('/home')}>
                     <IoMdHome className="mr-2 text-xl " /> 
                 </button>
             </div>

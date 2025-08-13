@@ -60,7 +60,7 @@ function ReadSeen() {
       <div className="flex gap-4 mt-8">
         <div
           className="flex items-center gap-2 cursor-pointer bg-gray-200 text-gray-800 hover:text-blue-600 px-4 py-2 rounded-lg transition"
-          onClick={() => window.location.href = '/read'}
+          onClick={() => navigate('/read')}
         >
           <IoArrowBackOutline />
           <span>Back</span>
@@ -68,7 +68,7 @@ function ReadSeen() {
 
         <div
           className="flex items-center gap-2 cursor-pointer bg-gray-200 text-gray-800 hover:text-green-600 px-4 py-2 rounded-lg transition"
-          onClick={() => window.location.href = '/home'}
+          onClick={() => navigate('/home')}
         >
           <IoMdHome />
           <span>Home</span>
