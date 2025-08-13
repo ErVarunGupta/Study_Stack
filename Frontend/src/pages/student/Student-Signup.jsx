@@ -139,6 +139,7 @@ function Student_Signup() {
               Signup
             </button>
 
+          </div>
             <span className="text-sm mt-3 text-gray-600">
               Already have an account?
               <Link
@@ -148,7 +149,6 @@ function Student_Signup() {
                 Login
               </Link>
             </span>
-          </div>
         </form>
 
         <ToastContainer />

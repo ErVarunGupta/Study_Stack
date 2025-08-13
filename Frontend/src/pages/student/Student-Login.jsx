@@ -5,7 +5,7 @@ import { handleError, handleSuccess } from "../utils";
 import { IoArrowBackOutline } from "react-icons/io5";
 import "react-toastify/dist/ReactToastify.css";
 
-const URL = import.meta.env.VITE_URL || "http://localhost:8080";
+const URL =  import.meta.env.VITE_URL ||"http://localhost:8080";
 
 function Student_Login() {
   const [loginInfo, setLoginInfo] = useState({
@@ -38,6 +38,7 @@ function Student_Login() {
         body: JSON.stringify(loginInfo),
       });
 
+      // console.log('response:', response);
       const result = await response.json();
       const { success, message, token, name, error } = result;
 

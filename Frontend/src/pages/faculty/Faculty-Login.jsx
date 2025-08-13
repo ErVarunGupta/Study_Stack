@@ -13,6 +13,8 @@ function Faculty_Login() {
     password: "",
   });
 
+  // console.log("URL: ", URL);
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
